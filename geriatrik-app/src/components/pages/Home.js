@@ -7,8 +7,11 @@ import viewlist_unfilled from '../../images/viewlist_unfilled.png'
 import dataset_filled from '../../images/dataset_filled.png'
 import dataset_unfilled from '../../images/dataset_unfilled.png'
 import { IconBase } from 'react-icons'
+import SearchBar from "../searchBar/searchBar";
 
 const Home = () => {
+  
+
   const loadPatients = () => {
     fetch("/patients").then((res) => res.json()).then((data) => setData(data.message));
   }
@@ -18,6 +21,24 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => setData(data.message));
   }, []);
+
+  const filterPosts = (posts, query) => {
+    if (!query) {
+        return posts;
+    }
+
+    return posts.filter((post) => {
+        const postName = post.nombre.toLowerCase();
+        return postName.includes(query);
+    });
+  };
+  
+  const { search } = window.location;
+  const query = new URLSearchParams(search).get('s');
+  const [searchQuery, setSearchQuery] = useState(query || '');
+  const filteredPosts = filterPosts(datos, searchQuery);
+  
+  
 
   const [tipoVista, setVista] = useState("Grid");
   const [patients, setPatients] = useState([
@@ -132,9 +153,10 @@ const Home = () => {
   if (tipoVista==="Grid") {
     view =  
           <div className='view-wrapper'>
+            
             <div className='central-bubble-view'>
               {!datos ? "loading..." : 
-              datos.map((currentPatient) => {
+              filteredPosts.map((currentPatient) => {
                 return(
                   <BubbleCard
                     patientObj={currentPatient}
@@ -174,7 +196,7 @@ const Home = () => {
                 </thead>
                 <tbody>
                   {
-                  datos.map((currentPatient) => {
+                  filteredPosts.map((currentPatient) => {
                     return(
                       <ListCard
                         patientObj={currentPatient}
@@ -197,8 +219,15 @@ const Home = () => {
   return (
     <div style={{width: centeredHomeWidth}} className='centered-home'>
       <h1>Bienvenida de nuevo, Marcela</h1>
+      
       <Navbar />
       <div className='home-bar'>
+        <div className='search'>
+        <SearchBar 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+        </div>
         <div className='home-view-buttons'>
           {buttonDataset}
           {buttonList}
