@@ -72,7 +72,11 @@ const Patient =() =>{
           .then((data) => setData(data.message));
     }, [id]);
     return(
-        !datos ? <h1>Loading</h1>:
+        !datos ? <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}><h1>Loading..</h1></div>:
         <div className='Card'>
             <PatientInfo 
                 image = {datos[0].imagenPerfil}
