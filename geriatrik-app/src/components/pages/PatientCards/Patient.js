@@ -6,6 +6,8 @@ import  TestButton  from '../../TestButton'
 import TestGraph from '../../graph/TestGraph'
 import { Bar } from "react-chartjs-2";
 import ListCardTest from './ListCardTest'
+import BackButton from '../../BackButton'
+
 
 const HomeLink = "/";
 const examenes = ([
@@ -173,8 +175,13 @@ const Details =(props) =>{
             </tbody>
             </table>
             }
-        </div>                
-        <hr className='Line2'></hr>
+            
+            </div>                
+            <hr className='Line2'></hr>
+            <div className='BackButton'>
+                <BackButton 
+                link = '/Home'></BackButton>
+            </div>
     </div>
     )
 }
